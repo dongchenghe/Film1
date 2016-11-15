@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>prototype</title>
+</head>
+<body>
+
+</body>
+<script>
+	//javascript prototype链复制对象 实现继承
+	parent.prototype.showColor=function(){
+		alert("parent"+this.color);
+		return this.color;
+	}
+	function parent(){
+		this.color="red";
+	}
+	var p=new parent();
+	p.showColor();
+	function child (){
+		this.color="black";
+		this.name="lisi";
+	}
+	//先后顺序会进行覆盖
+	child.prototype=new parent();
+	child.prototype.showColor=function(){
+		alert("child"+this.color);
+	}
+	child.prototype.showName=function(){
+		alert("child"+this.name)
+	}
+	var c=new child();
+	c.showColor();
+	
+</script>
+</html>

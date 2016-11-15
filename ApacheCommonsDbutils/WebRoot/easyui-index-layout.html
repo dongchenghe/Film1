@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="css/easyui.css">
+<script type="text/javascript" src="js/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/easyui-lang-zh_CN.js"></script>
+
+</head>
+<body>
+	
+	<div id="cc" class="easyui-layout" style="width:900px;height:400px;">
+        <div data-options="region:'north',split:true" style="height:100px;font-size:30px;">
+        	影城管理
+        </div>
+       
+       
+        <div data-options="region:'west',title:'西边',split:true" style="width:200px;">
+        	
+		      <ul id="tt" class="easyui-tree"></ul>
+		       <script type='text/javascript'>
+		       		$('#tt').tree({
+						    url:'managementCacheServlet',
+						    
+						    onClick: function(node){					    
+							if(node.children&&node.children==""){
+									openTree(node);
+									
+							}else{
+								//alert("you子节点");
+							}
+						}
+						
+						});
+					function openTree(node){
+						if($("#mytabs").tabs('exists',node.text)){
+							$('#mytabs').tabs('select',node.text);
+						}else{
+							$('#mytabs').tabs('add',{
+								    title:node.text,
+								//    content:node.text,
+								    closable:true,
+								 	href:node.path,
+								    tools:[{
+								        iconCls:'icon-mini-refresh',
+								        handler:function(){
+								            alert('refresh');
+									        }
+									 }]
+							});
+						}
+					}
+						
+		       </script>	
+		    
+        </div>
+        <div data-options="region:'center',title:'center title'" style="padding:5px;background:#eee;">
+
+        	<div id="mytabs" class="easyui-tabs" style="width:500px;height:250px;">
+		        <div title="welcome" style="padding:20px;display:none;" href="welcome.html">		          	 
+		        </div>
+		       
+    		</div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+</script>
+</html>

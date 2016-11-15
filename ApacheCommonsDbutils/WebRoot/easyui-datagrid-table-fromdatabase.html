@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="css/easyui.css">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/easyui-lang-zh_CN.js"></script>
+</head>
+<body>
+<div class="easyui-panel">
+	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="queryData()">查询</a>
+	<table id="bg" toolbar="#toolbar" class="easyui-datagrid" data-options="singleSelect:true,method:'get',resizable:false,pagination:true" 
+	style="width:700px;height:250px"
+	>
+	<!-- 
+		<thead>
+			<tr>
+				<th data-options="field:'productid',width:80">商品ID</th>
+				<th data-options="field:'productname',width:120">商品名字</th>
+				<th data-options="field:'unitcost',width:100">商品单价</th>
+				<th data-options="field:'status',width:50">商品状态</th>
+			</tr>
+		</thead>
+		 -->
+	</table>
+</div>
+<div id="toolbar">
+	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="deleteData()">删除</a>
+	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="updateData()">修改</a>
+	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="addData()">新增</a>
+</div>
+<div id="mybuttons">
+	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="deleteData()">保存</a>
+	<a href="javascript:void(0)" class="easyui-linkbutton" onclick="$('#dlg').dialog('close')">取消</a>
+</div>
+<div id="dlg" buttons="#mybuttons" class="easyui-dialog">
+	<form id="form1">
+		<table>
+			<tr>
+				<td>用户id</td>
+				<!-- name值要匹配，easyui js中才能用form的load方法 -->
+				<td><input class="easyui-textbox" name="id"  /></td>
+			</tr>
+			<tr>
+				<td>用户名</td>
+				<td><input class="easyui-textbox" name="name"/></td>
+			</tr>
+			<tr>
+				<td>用户密码</td>
+				<td><input class="easyui-textbox" name="pwd"/></td>
+			</tr>
+		</table>
+	</form>
+</div>
+</body>
+<script type="text/javascript">
+	$(function (){
+		$("#dlg").dialog("close");
+	});
+	function queryData(){
+		$("#bg").datagrid({
+			url:'EasyuiDatagridJsonServlet',
+			columns:[[  //二维数组，两个中括号
+				{field:'id',title:'用户ID',width:90},
+				{field:'name',title:'用户字',width:120},
+				{field:'test',title:'测试虚列',width:120,formatter:function(value,row,index){
+					if(index%2==0){
+						return "奇数列";
+					}else{
+						return "偶数列";
+					}
+					}
+				},
+				{field:'pwd',title:'用户密码',width:100,
+					formatter:function(value,row,index){
+						return value+"￥";
+					},
+					styler:function(value,row,index){
+						if(index%2==0){
+							return "background-color:red;color:blue";
+						}
+						if(row.unitcost==92){
+							return "background-color:black;color:white";
+						}
+					},
+				},
+				
+			]]
+			
+		});
+	}
+	var selectRow;
+	var selectRowIndex;
+	$("#bg").datagrid({
+		onSelect:function(index,row){
+			selectRowIndex=index;
+			selectRow=row;
+		},
+	});
+	
+	function deleteData(){
+		if(selectRow){
+			$.messager.confirm("确认删除","是否删除",function(r){
+			if(r){
+				$("#bg").datagrid('deleteRow',selectRowIndex);
+			}
+		});	
+		}
+	}
+	function updateData(){
+		if(selectRow){
+			$("#form1").form("clear");
+			$("#form1").form("load",selectRow);
+			$("#dlg").dialog("open");
+		}else{
+			$.messager.alert("温馨提示！","请选中您要修改的数据！");
+		}
+	}
+	function addData(){
+	
+			$("#form1").form("clear");
+			$("#dlg").dialog("open");
+		
+	}
+</script>
+</html>
